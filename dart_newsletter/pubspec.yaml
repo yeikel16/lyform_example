@@ -1,0 +1,15 @@
+name: dart_newsletter
+description: A example Newsletter form using lyform package in pure Dart.
+version: 1.0.0
+publish_to: "none"
+
+environment:
+  sdk: ">=2.17.1 <3.0.0"
+
+dependencies:
+  newsletter_form:
+    path: ../newsletter_form
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
