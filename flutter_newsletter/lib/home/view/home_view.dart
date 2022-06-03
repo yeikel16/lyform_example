@@ -78,6 +78,9 @@ class _HomeViewState extends State<HomeView> {
                       bloc: context.read<NewsletterForm>().email,
                       builder: (context, state) {
                         return TextFormField(
+                          key: const Key(
+                            'key_newsletterForm_nameInput_textField',
+                          ),
                           controller: _emailController,
                           onChanged: context.read<NewsletterForm>().email.dirty,
                           decoration: InputDecoration(
@@ -98,6 +101,7 @@ class _HomeViewState extends State<HomeView> {
                         child: CircularProgressIndicator(),
                       ),
                       onValid: () => MaterialButton(
+                        key: const Key('key_on_valid_subscribe_button'),
                         color: Colors.blue,
                         height: 60,
                         child: const Text(
@@ -109,6 +113,7 @@ class _HomeViewState extends State<HomeView> {
                         },
                       ),
                       orElse: () => MaterialButton(
+                        key: const Key('key_or_else_subscribe_button'),
                         height: 60,
                         color: Colors.grey,
                         child: const Center(child: Text('Subscribe')),
