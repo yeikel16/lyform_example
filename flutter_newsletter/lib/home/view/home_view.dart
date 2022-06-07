@@ -3,14 +3,54 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lyform/flutter_lyform.dart';
 import 'package:newsletter_form/newsletter_form.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: ListView(
+        children: [
+          Container(height: 32),
+          CircleAvatar(
+            radius: (width * 0.06).clamp(60, 250),
+            backgroundColor: Colors.blue,
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+              size: (width * 0.06).clamp(50, 250),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+            child: Text(
+              "Hey, I'm a Mobile Developer.",
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: (width * 0.06).clamp(45, 120),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: const NewsletterField(),
+    );
+  }
 }
 
-class _HomeViewState extends State<HomeView> {
+class NewsletterField extends StatefulWidget {
+  const NewsletterField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<NewsletterField> createState() => _NewsletterFieldState();
+}
+
+class _NewsletterFieldState extends State<NewsletterField> {
   final _emailController = TextEditingController();
 
   @override
@@ -21,45 +61,16 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final width = size.width;
-    return Scaffold(
-      body: FormBlocListener<NewsletterForm, String, String>(
-        bloc: context.read<NewsletterForm>(),
-        onSuccess: (value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(value)),
-          );
-          _emailController.clear();
-        },
-        child: ListView(
-          children: [
-            Container(height: 32),
-            CircleAvatar(
-              radius: (width * 0.06).clamp(60, 250),
-              backgroundColor: Colors.blue,
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: (width * 0.06).clamp(50, 250),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-              child: Text(
-                "Hey, I'm a Mobile Developer.",
-                overflow: TextOverflow.visible,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: (width * 0.06).clamp(45, 120),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
+    final width = MediaQuery.of(context).size.width;
+    return FormBlocListener<NewsletterForm, String, String>(
+      bloc: context.read<NewsletterForm>(),
+      onSuccess: (value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(value)),
+        );
+        _emailController.clear();
+      },
+      child: Container(
         color: Colors.white,
         height: context.watch<NewsletterForm>().email.isInvalid ? 125 : 100,
         child: Column(
@@ -72,8 +83,8 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.all(8),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: width * 0.8 - 80,
+                  Expanded(
+                    flex: 3,
                     child: InputBlocBuilder(
                       bloc: context.read<NewsletterForm>().email,
                       builder: (context, state) {
@@ -104,19 +115,20 @@ class _HomeViewState extends State<HomeView> {
                         key: const Key('key_on_valid_subscribe_button'),
                         color: Colors.blue,
                         height: 60,
+                        onPressed: context.read<NewsletterForm>().submit,
                         child: const Text(
                           'Subscribe',
                           style: TextStyle(color: Colors.white),
                         ),
-                        onPressed: () {
-                          context.read<NewsletterForm>().submit();
-                        },
                       ),
                       orElse: () => MaterialButton(
                         key: const Key('key_or_else_subscribe_button'),
                         height: 60,
                         color: Colors.grey,
-                        child: const Center(child: Text('Subscribe')),
+                        child: const Text(
+                          'Subscribe',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         onPressed: () {},
                       ),
                     ),

@@ -40,7 +40,27 @@ void main() {
         expect(find.text("Hey, I'm a Mobile Developer."), findsOneWidget);
       },
     );
+    testWidgets(
+      'renders NewsletterField widget',
+      (tester) async {
+        final newsletterForm = MockNewsletterForm();
+        when(() => newsletterForm.state).thenReturn(const FormPureState());
+        when(() => newsletterForm.email.isInvalid).thenReturn(false);
+        when(() => newsletterForm.email.state).thenReturn(InputBlocState(''));
 
+        await tester.pumpApp(
+          BlocProvider<NewsletterForm>.value(
+            value: newsletterForm,
+            child: const HomeView(),
+          ),
+        );
+
+        expect(find.byType(NewsletterField), findsOneWidget);
+      },
+    );
+  });
+
+  group('NewsletterField', () {
     testWidgets(
       'renders a Text with "Subscribe to my newsletter"',
       (tester) async {
