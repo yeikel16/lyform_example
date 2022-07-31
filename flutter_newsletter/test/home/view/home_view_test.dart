@@ -9,12 +9,11 @@ import 'package:newsletter_form/newsletter_form.dart';
 
 import '../../helpers/helpers.dart';
 
-class MockEmailInputBloc
-    extends MockBloc<InputBlocEvent<String>, InputBlocState<String>>
-    implements InputBloc<String> {}
+class MockEmailInputBloc extends MockCubit<LyInputState<String>>
+    implements LyInput<String> {}
 
 class MockNewsletterForm
-    extends MockBloc<FormBlocEvent, FormBlocState<String, String>>
+    extends MockBloc<LyFormEvent, LyFormState<String, String>>
     implements NewsletterForm {
   @override
   final email = MockEmailInputBloc();
@@ -26,9 +25,11 @@ void main() {
       'renders a Text with "Hey, I\'m a Mobile Developer."',
       (tester) async {
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormPureState());
+        when(() => newsletterForm.state).thenReturn(const LyFormPureState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state).thenReturn(InputBlocState(''));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(value: '', pureValue: '', lastNotNullValue: ''),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -44,9 +45,11 @@ void main() {
       'renders NewsletterField widget',
       (tester) async {
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormPureState());
+        when(() => newsletterForm.state).thenReturn(const LyFormPureState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state).thenReturn(InputBlocState(''));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(value: '', pureValue: '', lastNotNullValue: ''),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -65,9 +68,11 @@ void main() {
       'renders a Text with "Subscribe to my newsletter"',
       (tester) async {
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormPureState());
+        when(() => newsletterForm.state).thenReturn(const LyFormPureState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state).thenReturn(InputBlocState(''));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(value: '', pureValue: '', lastNotNullValue: ''),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -85,9 +90,11 @@ void main() {
       (tester) async {
         const inactiveSubcribeButton = Key('key_or_else_subscribe_button');
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormPureState());
+        when(() => newsletterForm.state).thenReturn(const LyFormPureState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state).thenReturn(InputBlocState(''));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(value: '', pureValue: '', lastNotNullValue: ''),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -107,10 +114,16 @@ void main() {
       (tester) async {
         const inactiveSubcribeButton = Key('key_or_else_subscribe_button');
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormInvalidState());
+        when(() => newsletterForm.state).thenReturn(const LyFormInvalidState());
         when(() => newsletterForm.email.isInvalid).thenReturn(true);
-        when(() => newsletterForm.email.state)
-            .thenReturn(InputBlocState('laura@gmail', 'Email is not valid.'));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(
+            value: 'laura@gmail',
+            pureValue: '',
+            lastNotNullValue: '',
+            error: 'Email is not valid.',
+          ),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -131,10 +144,15 @@ void main() {
       'state is FormLoadingState ',
       (tester) async {
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormLoadingState());
+        when(() => newsletterForm.state).thenReturn(const LyFormLoadingState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state)
-            .thenReturn(InputBlocState('laura@gmail.com'));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(
+            value: 'laura@gmail.com',
+            lastNotNullValue: '',
+            pureValue: '',
+          ),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -155,10 +173,15 @@ void main() {
         const newsletterTextFieldKey =
             Key('key_newsletterForm_nameInput_textField');
         final newsletterForm = MockNewsletterForm();
-        when(() => newsletterForm.state).thenReturn(const FormValidState());
+        when(() => newsletterForm.state).thenReturn(const LyFormValidState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state)
-            .thenReturn(InputBlocState(mockEmail));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(
+            value: mockEmail,
+            lastNotNullValue: '',
+            pureValue: '',
+          ),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(
@@ -181,22 +204,27 @@ void main() {
         const mockEmail = 'laura@gmail.com';
         final newsletterForm = MockNewsletterForm();
 
-        whenListen(
+        whenListen<LyFormState>(
           newsletterForm,
           Stream.fromIterable([
-            const FormPureState<String, String>(),
-            const FormValidState<String, String>(),
-            const FormLoadingState<String, String>(),
-            const FormSuccessState<String, String>(
+            const LyFormPureState<String, String>(),
+            const LyFormValidState<String, String>(),
+            const LyFormLoadingState<String, String>(),
+            const LyFormSuccessState<String, String>(
               'You have successfully subscribed!',
             )
           ]),
-          initialState: const FormPureState<String, String>(),
+          initialState: const LyFormPureState<String, String>(),
         );
 
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
-        when(() => newsletterForm.email.state)
-            .thenReturn(InputBlocState(mockEmail));
+        when(() => newsletterForm.email.state).thenReturn(
+          LyInputState(
+            value: mockEmail,
+            pureValue: '',
+            lastNotNullValue: '',
+          ),
+        );
 
         await tester.pumpApp(
           BlocProvider<NewsletterForm>.value(

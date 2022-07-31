@@ -62,7 +62,7 @@ class _NewsletterFieldState extends State<NewsletterField> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return FormBlocListener<NewsletterForm, String, String>(
+    return LyFormListener<NewsletterForm, String, String>(
       bloc: context.read<NewsletterForm>(),
       onSuccess: (value) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,8 +85,8 @@ class _NewsletterFieldState extends State<NewsletterField> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: InputBlocBuilder(
-                      bloc: context.read<NewsletterForm>().email,
+                    child: LyInputBuilder(
+                      lyInput: context.read<NewsletterForm>().email,
                       builder: (context, state) {
                         return TextFormField(
                           key: const Key(
@@ -106,7 +106,7 @@ class _NewsletterFieldState extends State<NewsletterField> {
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: FormBlocBuilder<NewsletterForm>(
+                    child: LyFormBuilder<NewsletterForm>(
                       bloc: context.read<NewsletterForm>(),
                       onLoading: () => const Center(
                         child: CircularProgressIndicator(),
