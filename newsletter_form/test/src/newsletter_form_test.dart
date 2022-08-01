@@ -12,8 +12,8 @@ void main() {
       'should emit `LyFormValidState` when the email is valid',
       build: NewsletterForm.new,
       act: (bloc) => bloc.email.dirty(validEmail),
-      expect: () => <LyFormState<String, String>>[
-        const LyFormValidState(),
+      expect: () => [
+        isA<LyFormValidState>(),
       ],
     );
 
@@ -21,8 +21,8 @@ void main() {
       'should emit `LyFormInvalidState` when the email is invalid',
       build: NewsletterForm.new,
       act: (bloc) => bloc.email.dirty(inValidEmail),
-      expect: () => <LyFormState<String, String>>[
-        const LyFormInvalidState(),
+      expect: () => [
+        isA<LyFormInvalidState>(),
       ],
     );
 
@@ -33,11 +33,11 @@ void main() {
         ..email.dirty(validEmail)
         ..submit(),
       wait: const Duration(seconds: 2),
-      expect: () => <LyFormState<String, String>>[
-        const LyFormValidState(),
-        // const LyFormLoadingState(),
-        // const LyFormSuccessState('You have successfully subscribed!'),
-        // const LyFormPureState(),
+      expect: () => [
+        isA<LyFormValidState>(),
+        isA<LyFormLoadingState>(),
+        isA<LyFormSuccessState>(),
+        isA<LyFormPureState>(),
       ],
     );
   });
