@@ -175,6 +175,7 @@ void main() {
         final newsletterForm = MockNewsletterForm();
         when(() => newsletterForm.state).thenReturn(const LyFormValidState());
         when(() => newsletterForm.email.isInvalid).thenReturn(false);
+        when(() => newsletterForm.email.dirty(mockEmail)).thenReturn(true);
         when(() => newsletterForm.email.state).thenReturn(
           LyInputState(
             value: mockEmail,
@@ -204,7 +205,7 @@ void main() {
         const mockEmail = 'laura@gmail.com';
         final newsletterForm = MockNewsletterForm();
 
-        whenListen<LyFormState>(
+        whenListen<LyFormState<String, String>>(
           newsletterForm,
           Stream.fromIterable([
             const LyFormPureState<String, String>(),

@@ -13,7 +13,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_localizations:
     sdk: flutter
-  flutter_lyform: ^0.7.2
+  flutter_lyform: ^0.8.1
   intl: ^0.17.0
   newsletter_form:
     path: ../newsletter_form
