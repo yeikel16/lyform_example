@@ -140,14 +140,14 @@ packages:
       name: lyform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.1"
+    version: "0.10.1"
   lyform_validators:
     dependency: transitive
     description:
       name: lyform_validators
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.3"
+    version: "0.8.1"
   matcher:
     dependency: transitive
     description:
